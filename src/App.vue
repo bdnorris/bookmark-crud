@@ -1,27 +1,27 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>|
-      <router-link to="/about">About</router-link>
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link> |
+      <router-link to="/new">New</router-link>
     </div>
+    <button @click="bookmarkletTest">Bookmarklet Test</button>
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  created () {
-    this.bookmarkletTest()
-  },
   methods: {
     bookmarkletTest: function () {
-      var metas = (document.getElementsByTagName('meta'))
+      const metas = (document.getElementsByTagName('meta'))
+      let description = ''
       for (let i = 0; i < metas.length; i++) {
         if (metas[i].getAttribute('name') === 'description') {
-          return metas[i].getAttribute('content')
+          description = metas[i].getAttribute('content')
         }
       }
-      location.href = 'http://www.reddit.com/submit?url=' + encodeURIComponent(location.href) + '&title=' + encodeURIComponent(document.title) + '&description=' + encodeURIComponent()
+      location.href = 'new?url=' + encodeURIComponent(location.href) + '&title=' + encodeURIComponent(document.title) + '&description=' + encodeURIComponent(description)
     }
   }
 }
