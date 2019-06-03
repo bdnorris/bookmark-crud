@@ -1,6 +1,12 @@
 <template>
   <div class="bookmark-list">
     bookmark list
+    <div v-for="(bookmark, index) in bookmarks" :key="index">
+      <h1>{{ bookmark.fields.Name }}</h1>
+      <a :href="bookmark.fields.Link">link</a>
+      <div> {{bookmark.fields.Star}} </div>
+      <div> {{bookmark.fields.Tags}} </div>
+    </div>
   </div>
 </template>
 
@@ -10,13 +16,15 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      atUrl: '//api.airtable.com/',
+      atUrl: '//api.airtable.com/v0/',
       atTable: 'app8h8YVTKPhUN6MY',
-      atApi: process.env.AIRTABLE_API_KEY
+      atApi: process.env.VUE_APP_AIRTABLE_API_KEY,
+      bookmarks: []
     }
   },
   mounted () {
     this.getRecords()
+    console.log(process)
   },
   methods: {
     getRecords () {
@@ -29,9 +37,10 @@ export default {
           'Authorization': 'Bearer ' + this.atApi
         }
       })
-        .then(function (response) {
+        .then((response) => {
           // handle success
           console.log('response', response)
+          this.bookmarks = response.data.records
         })
         .catch(function (error) {
           // handle error
