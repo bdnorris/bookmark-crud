@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     search (term) {
-      console.log('term', term)
+      // console.log('term', term)
       this.$emit('bsearch', term)
     }
   }
