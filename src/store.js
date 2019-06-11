@@ -22,8 +22,16 @@ export default new Vuex.Store({
       })
         .then((response) => {
           // handle success
-          console.log('response tags', response)
-          this.tags = response.data.records
+          console.log('response tags', response.data.records)
+          response.data.records.map(t => {
+            // console.log('t', t.fields.Tags)
+            t.fields.Tags.map(g => {
+              // console.log('g', g)
+              if (!this.state.tags.includes(g)) {
+                this.state.tags.push(g)
+              }
+            })
+          })
         })
         .catch(function (error) {
           // handle error
