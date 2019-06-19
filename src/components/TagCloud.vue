@@ -2,9 +2,9 @@
   <div class="tag-cloud">
     <ul>
       <li :key="index" v-for="(tag, index) in tags">
-        <span>
-          {{tag}}
-        </span>
+        <button type="button" @click="activateTag(tag, $event)">
+          {{tag.name}} | {{tag.count}} | {{tag.active}}
+        </button>
       </li>
     </ul>
   </div>
@@ -23,6 +23,12 @@ export default {
     store.dispatch('init')
     console.log('hello', store.state.tags) // -> 1
     this.tags = store.state.tags
+  },
+  methods: {
+    activateTag (tag, e) {
+      console.log('activateTag', tag)
+      this.$emit('tagset', tag)
+    }
   }
 }
 </script>

@@ -24,11 +24,11 @@ export default new Vuex.Store({
           // handle success
           console.log('response tags', response.data.records)
           response.data.records.map(t => {
-            // console.log('t', t.fields.Tags)
             t.fields.Tags.map(g => {
-              // console.log('g', g)
-              if (!this.state.tags.includes(g)) {
-                this.state.tags.push(g)
+              if (!this.state.tags.find(o => { return o.name === g })) {
+                this.state.tags.push({ name: g, count: 1, active: false })
+              } else {
+                this.state.tags.find(o => { return o.name === g }).count++
               }
             })
           })
@@ -40,11 +40,17 @@ export default new Vuex.Store({
         .finally(function () {
           // always executed
         })
+    },
+    setActiveTag (tag) {
+      this.state.tags.find(t => { return t.name === tag.name }).active = true
     }
   },
   actions: {
     init (context) {
       context.commit('getTags')
+    },
+    tagSet (context) {
+      context.commit('setActiveTag(tag)')
     }
   }
 })

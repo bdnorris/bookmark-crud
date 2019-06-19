@@ -4,7 +4,7 @@
     <TagCloud />
     <SearchBar v-on:bsearch="search" />
     <div v-for="(bookmark, index) in bookmarks" :key="index">
-      <template v-if="bookmark.fields.Name.toLowerCase().includes(lowerSearch)">
+      <template v-if="bookmark.fields.Name.toLowerCase().includes(lowerSearch) && tagActive">
         <h1>{{ bookmark.fields.Name }}</h1>
         <a :href="bookmark.fields.Link">link</a>
         <div> {{bookmark.fields.Star}} </div>
@@ -18,6 +18,7 @@
 import axios from 'axios'
 import SearchBar from '@/components/SearchBar.vue'
 import TagCloud from '@/components/TagCloud.vue'
+// import store from '@/store.js'
 
 export default {
   components: {
@@ -70,6 +71,10 @@ export default {
   computed: {
     lowerSearch () {
       return this.sterm.toLowerCase()
+    },
+    tagActive () {
+      return true
+      // ??
     }
   }
 }
