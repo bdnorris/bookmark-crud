@@ -1,9 +1,9 @@
 <template>
   <div class="bookmark-list">
     bookmark list
-    <TagCloud />
+    <TagCloud @tagset="tagSet" />
     <SearchBar v-on:bsearch="search" />
-    <div v-for="(bookmark, index) in bookmarks" :key="index">
+    <div v-for="(bookmark, index) in activeBookmarks" :key="index">
       <template v-if="bookmark.fields.Name.toLowerCase().includes(lowerSearch) && tagActive">
         <h1>{{ bookmark.fields.Name }}</h1>
         <a :href="bookmark.fields.Link">link</a>
@@ -31,6 +31,7 @@ export default {
       atTable: 'app8h8YVTKPhUN6MY',
       atApi: process.env.VUE_APP_AIRTABLE_API_KEY,
       bookmarks: [],
+      activeBookmarks: [],
       sterm: ''
     }
   },
@@ -53,6 +54,7 @@ export default {
           // handle success
           console.log('response', response)
           this.bookmarks = response.data.records
+          this.activeBookmarks = this.bookmarks
         })
         .catch(function (error) {
           // handle error
@@ -66,6 +68,17 @@ export default {
       // this.bookmarks = this.bookmarks.filter(bm => bm.fields.Name.includes(term))
       this.sterm = term
       console.log('search', this.sterm, term)
+    },
+    tagSet (tag) {
+      console.log('tag', tag)
+      console.log('bookmark', this.bookmarks)
+      if (tag.active) {
+        this.activeBookmarks = this.bookmarks.filter((b) => {
+          return b.fields.Tags.includes(tag.name)
+        })
+      } else {
+        this.activeBookmarks = this.bookmarks
+      }
     }
   },
   computed: {

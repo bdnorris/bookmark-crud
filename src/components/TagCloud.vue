@@ -26,7 +26,12 @@ export default {
   },
   methods: {
     activateTag (tag, e) {
-      console.log('activateTag', tag)
+      // console.log('activateTag', tag)
+      this.tags.map((t) => {
+        if (t.name === tag.name) {
+          if (t.active) { t.active = false } else { t.active = true }
+        }
+      })
       this.$emit('tagset', tag)
     }
   }
