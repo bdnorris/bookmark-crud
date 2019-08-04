@@ -9,9 +9,9 @@ export default new Vuex.Store({
     tags: []
   },
   mutations: {
-    getTags () {
+    async getTags () {
       // Make a request for a user with a given ID
-      axios.get('//api.airtable.com/v0/' + 'app8h8YVTKPhUN6MY' + '/Main', {
+      await axios.get('//api.airtable.com/v0/' + 'app8h8YVTKPhUN6MY' + '/Main', {
         params: {
           'maxRecords': 100,
           'fields': ['Tags']
@@ -23,14 +23,16 @@ export default new Vuex.Store({
         .then((response) => {
           // handle success
           console.log('response tags', response.data.records)
-          response.data.records.map(t => {
-            t.fields.Tags.map(g => {
-              if (!this.state.tags.find(o => { return o.name === g })) {
-                this.state.tags.push({ name: g, count: 1, active: false })
-              } else {
-                this.state.tags.find(o => { return o.name === g }).count++
-              }
-            })
+          response.data.records.map((t) => {
+            if (typeof t.fields.Tags !== 'undefined') {
+              t.fields.Tags.map(g => {
+                if (!this.state.tags.find(o => { return o.name === g })) {
+                  this.state.tags.push({ name: g, count: 1, active: false })
+                } else {
+                  this.state.tags.find(o => { return o.name === g }).count++
+                }
+              })
+            }
           })
         })
         .catch(function (error) {
