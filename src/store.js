@@ -6,15 +6,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    tags: []
+    tags: [],
+    bookmarks: []
   },
   mutations: {
-    async getTags () {
+    async getRecords () {
       // Make a request for a user with a given ID
       await axios.get('//api.airtable.com/v0/' + 'app8h8YVTKPhUN6MY' + '/Main', {
         params: {
-          'maxRecords': 100,
-          'fields': ['Tags']
+          'maxRecords': 100
+          // 'fields': ['Tags']
         },
         headers: {
           'Authorization': 'Bearer ' + process.env.VUE_APP_AIRTABLE_API_KEY
@@ -22,18 +23,26 @@ export default new Vuex.Store({
       })
         .then((response) => {
           // handle success
-          console.log('response tags', response.data.records)
+          console.log('response', response.data.records)
+          // this.state.bookmarks = response.data.records
+          this.state.bookmarks = response.data.records.map((r) => {
+            if (typeof r.fields.Name !== 'undefined') {
+              return r
+            }
+          }) // ! set bookmarks
+          console.log('bookmarks', this.state.bookmarks)
           response.data.records.map((t) => {
             if (typeof t.fields.Tags !== 'undefined') {
               t.fields.Tags.map(g => {
                 if (!this.state.tags.find(o => { return o.name === g })) {
-                  this.state.tags.push({ name: g, count: 1, active: false })
+                  this.state.tags.push({ name: g, count: 1, active: false }) // ! set tags
                 } else {
                   this.state.tags.find(o => { return o.name === g }).count++
                 }
               })
             }
           })
+          console.log('tags', this.state.tags)
         })
         .catch(function (error) {
           // handle error
@@ -49,7 +58,7 @@ export default new Vuex.Store({
   },
   actions: {
     init (context) {
-      context.commit('getTags')
+      context.commit('getRecords')
     },
     tagSet (context) {
       context.commit('setActiveTag(tag)')

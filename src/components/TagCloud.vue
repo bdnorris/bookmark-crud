@@ -11,8 +11,6 @@
 </template>
 
 <script>
-import store from '@/store.js'
-
 export default {
   data () {
     return {
@@ -20,9 +18,7 @@ export default {
     }
   },
   mounted () {
-    store.dispatch('init')
-    console.log('hello', store.state.tags) // -> 1
-    this.tags = store.state.tags
+    this.tags = this.$store.state.tags
   },
   methods: {
     activateTag (tag, e) {

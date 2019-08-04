@@ -11,7 +11,12 @@
 </template>
 
 <script>
+import store from '@/store.js'
+
 export default {
+  mounted () {
+    store.dispatch('init')
+  },
   methods: {
     bookmarkletTest: function () {
       const metas = (document.getElementsByTagName('meta'))
