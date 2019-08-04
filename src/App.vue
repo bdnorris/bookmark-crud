@@ -11,11 +11,10 @@
 </template>
 
 <script>
-import store from '@/store.js'
 
 export default {
   mounted () {
-    store.dispatch('init')
+    this.$store.dispatch('init')
   },
   methods: {
     bookmarkletTest: function () {
