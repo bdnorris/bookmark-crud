@@ -28,7 +28,7 @@ export default {
           if (t.active) { t.active = false } else { t.active = true }
         }
       })
-      this.$emit('tagset', tag)
+      this.$store.dispatch('tagSet', tag)
     }
   }
 }

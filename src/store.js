@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     tags: [],
-    bookmarks: []
+    bookmarks: [],
+    activeBookmarks: []
   },
   mutations: {
     async getRecords () {
@@ -30,6 +31,7 @@ export default new Vuex.Store({
               return r
             }
           }) // ! set bookmarks
+          this.state.activeBookmarks = this.state.bookmarks
           console.log('bookmarks', this.state.bookmarks)
           response.data.records.map((t) => {
             if (typeof t.fields.Tags !== 'undefined') {
@@ -52,16 +54,38 @@ export default new Vuex.Store({
           // always executed
         })
     },
-    setActiveTag (tag) {
-      this.state.tags.find(t => { return t.name === tag.name }).active = true
+    setActiveTag (context, tag) {
+      console.log('tag', tag)
+      if (tag.active) {
+        console.log('3')
+        this.state.tags.find(t => { return t.name === tag.name }).active = true
+      } else {
+        console.log('4')
+        this.state.tags.find(t => { return t.name === tag.name }).active = false
+      }
+      // console.log('bookmarks', this.bookmarks)
+    },
+    filterBookmarksByTags (context, tag) {
+      console.log('filtering', tag)
+      if (tag.active) {
+        // this is the incoming tag, so we don't expect it to be active yet
+        console.log('1')
+        context.activeBookmarks = context.bookmarks.filter((b) => {
+          return b.fields.Tags.includes(tag.name)
+        })
+      } else {
+        console.log('2')
+        context.activeBookmarks = context.bookmarks
+      }
     }
   },
   actions: {
-    init (context) {
+    init (context, tag) {
       context.commit('getRecords')
     },
-    tagSet (context) {
-      context.commit('setActiveTag(tag)')
+    tagSet (context, tag) {
+      context.commit('setActiveTag', tag)
+      context.commit('filterBookmarksByTags', tag)
     }
   }
 })

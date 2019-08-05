@@ -20,15 +20,7 @@ export default {
   },
   methods: {
     tagSet (tag) {
-      console.log('tag', tag)
-      console.log('bookmarks', this.bookmarks)
-      if (tag.active) {
-        this.activeBookmarks = this.bookmarks.filter((b) => {
-          return b.fields.Tags.includes(tag.name)
-        })
-      } else {
-        this.activeBookmarks = this.bookmarks
-      }
+      this.$store.dispatch('tagSet')
     }
   }
 }
