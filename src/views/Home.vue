@@ -23,3 +23,12 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+.home {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+}
+
+</style>

@@ -2,8 +2,13 @@
   <div class="tag-cloud">
     <ul>
       <li :key="index" v-for="(tag, index) in tags">
-        <button type="button" class="button button--tag" @click="activateTag(tag, $event)">
-          {{tag.name}} | {{tag.count}} | {{tag.active}}
+        <button
+          type="button"
+          :class="{ 'button': true, 'button--tag': true, 'button--active': tag.active }"
+          @click="activateTag(tag, $event)"
+          :style="'font-size: ' + (12 * (tag.count * 0.8)) + 'px'"
+        >
+          {{tag.name}}
         </button>
       </li>
     </ul>

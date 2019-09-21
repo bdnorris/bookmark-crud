@@ -1,0 +1,25 @@
+button {
+  @include button-reset;
+}
+
+.button {
+  line-height: 1;
+  background-color: pink;
+  padding: 0.5em 1em 0.6em 1em;
+}
+
+button.button {
+
+}
+a.button {
+  text-decoration: none;
+}
+
+.button--tag {
+  margin: 0.5rem;
+  color: white;
+}
+
+.button--active {
+  background-color: red;
+}
