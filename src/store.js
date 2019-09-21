@@ -77,6 +77,17 @@ export default new Vuex.Store({
         console.log('2')
         context.activeBookmarks = context.bookmarks
       }
+    },
+    filterBookmarksByTerm (context, term) {
+      console.log('termstore', term)
+      console.log('active', context.activeBookmarks)
+      if (term.length > 0) {
+        context.activeBookmarks = context.bookmarks.filter((t) => {
+          return t.fields.Name.toLowerCase().includes(term.toLowerCase())
+        })
+      } else {
+        context.activeBookmarks = context.bookmarks
+      }
     }
   },
   actions: {
@@ -86,6 +97,9 @@ export default new Vuex.Store({
     tagSet (context, tag) {
       context.commit('setActiveTag', tag)
       context.commit('filterBookmarksByTags', tag)
+    },
+    search (context, term) {
+      context.commit('filterBookmarksByTerm', term)
     }
   }
 })

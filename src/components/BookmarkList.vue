@@ -43,9 +43,10 @@ export default {
     //   console.log('active bookmarks', this.activeBookmarks)
     // },
     search (term) {
-      // this.bookmarks = this.bookmarks.filter(bm => bm.fields.Name.includes(term))
       this.sterm = term
+      // this.bookmarks = this.bookmarks.filter(bm => bm.fields.Name.includes(term))
       console.log('search', this.sterm, term)
+      this.$store.dispatch('search', term)
     }
     // searchActive (bookmark) {
     //   bookmark.fields.Name.toLowerCase().includes(this.lowerSearch)
