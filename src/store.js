@@ -55,32 +55,24 @@ export default new Vuex.Store({
         })
     },
     setActiveTag (context, tag) {
-      console.log('tag', tag)
       if (tag.active) {
-        console.log('3')
         this.state.tags.find(t => { return t.name === tag.name }).active = true
       } else {
-        console.log('4')
         this.state.tags.find(t => { return t.name === tag.name }).active = false
       }
       // console.log('bookmarks', this.bookmarks)
     },
     filterBookmarksByTags (context, tag) {
-      console.log('filtering', tag)
       if (tag.active) {
         // this is the incoming tag, so we don't expect it to be active yet
-        console.log('1')
         context.activeBookmarks = context.bookmarks.filter((b) => {
           return b.fields.Tags.includes(tag.name)
         })
       } else {
-        console.log('2')
         context.activeBookmarks = context.bookmarks
       }
     },
     filterBookmarksByTerm (context, term) {
-      console.log('termstore', term)
-      console.log('active', context.activeBookmarks)
       if (term.length > 0) {
         context.activeBookmarks = context.bookmarks.filter((t) => {
           return t.fields.Name.toLowerCase().includes(term.toLowerCase())
