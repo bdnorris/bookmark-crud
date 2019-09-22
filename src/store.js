@@ -9,7 +9,8 @@ export default new Vuex.Store({
     tags: [],
     activeTags: [],
     bookmarks: [],
-    activeBookmarks: []
+    activeBookmarks: [],
+    searchedBookmarks: []
   },
   mutations: {
     async getRecords () {
@@ -102,11 +103,11 @@ export default new Vuex.Store({
     },
     filterBookmarksByTerm (context, term) {
       if (term.length > 0) {
-        context.activeBookmarks = context.bookmarks.filter(t => {
+        context.searchedBookmarks = context.activeBookmarks.filter(t => {
           return t.fields.Name.toLowerCase().includes(term.toLowerCase())
         })
       } else {
-        context.activeBookmarks = context.bookmarks
+        context.searchedBookmarks = []
       }
     }
   },

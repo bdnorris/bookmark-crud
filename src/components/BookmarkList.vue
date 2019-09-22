@@ -54,7 +54,11 @@ export default {
   },
   computed: {
     bookmarks () {
-      return this.$store.state.activeBookmarks
+      if (this.$store.state.searchedBookmarks.length > 0) {
+        return this.$store.state.searchedBookmarks
+      } else {
+        return this.$store.state.activeBookmarks
+      }
     },
     lowerSearch () {
       return this.sterm.toLowerCase()
