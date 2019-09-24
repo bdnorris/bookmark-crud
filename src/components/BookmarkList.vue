@@ -45,7 +45,7 @@ export default {
     search (term) {
       this.sterm = term
       // this.bookmarks = this.bookmarks.filter(bm => bm.fields.Name.includes(term))
-      console.log('search', this.sterm, term)
+      // console.log('search', this.sterm, term)
       this.$store.dispatch('search', term)
     }
     // searchActive (bookmark) {

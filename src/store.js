@@ -10,7 +10,8 @@ export default new Vuex.Store({
     activeTags: [],
     bookmarks: [],
     activeBookmarks: [],
-    searchedBookmarks: []
+    searchedBookmarks: [],
+    currentTerm: ''
   },
   mutations: {
     async getRecords () {
@@ -79,35 +80,109 @@ export default new Vuex.Store({
       // console.log('bookmarks', this.bookmarks)
       console.log('activeTags', this.state.activeTags)
     },
-    filterBookmarksByTags (context, tag) {
-      if (tag.active) {
-        // this is the incoming tag, so we don't expect it to be active yet
-        context.activeBookmarks = context.bookmarks.filter(b => {
-          // return b.fields.Tags.includes(tag.name)
-          // for each bookmark
-          console.log('b.fields.Tags', b.fields.Tags)
-          console.log('activeTags', context.activeTags)
-          return b.fields.Tags.some(tagInBookmarks => {
-            // for each tag in bookmark
-            // return tagInBookmarks === 'vue'
-            console.log('tagInBookmarks', tagInBookmarks)
+    // filterBookmarksByTags (context, tag) {
+    //   if (tag.active) {
+    //     // this is the incoming tag, so we don't expect it to be active yet
+    //     context.activeBookmarks = context.bookmarks.filter(b => {
+    //       // return b.fields.Tags.includes(tag.name)
+    //       // for each bookmark
+    //       console.log('b.fields.Tags', b.fields.Tags)
+    //       console.log('activeTags', context.activeTags)
+    //       return b.fields.Tags.some(tagInBookmarks => {
+    //         // for each tag in bookmark
+    //         // return tagInBookmarks === 'vue'
+    //         console.log('tagInBookmarks', tagInBookmarks)
+    //         return context.activeTags.find(activeTag => {
+    //           // for each activeTag
+    //           return activeTag.name === tagInBookmarks
+    //         })
+    //       })
+    //     })
+    //   } else {
+    //     context.activeBookmarks = context.bookmarks
+    //   }
+    // },
+    // filterBookmarksByTerm (context, term) {
+    //   if (term.length > 0) {
+    //     context.searchedBookmarks = context.activeBookmarks.filter(t => {
+    //       return t.fields.Name.toLowerCase().includes(term.toLowerCase())
+    //     })
+    //   } else {
+    //     context.searchedBookmarks = []
+    //   }
+    // },
+    filter (context) {
+      // ! search is here, turn back on when ready
+      // context.searchedBookmarks = context.activeBookmarks.filter(t => {
+      //   return t.fields.Name.toLowerCase().includes(this.state.currentTerm.toLowerCase())
+      // })
+      // if (context.activeTags.length > 0) {
+      console.log('a')
+      context.activeBookmarks = context.bookmarks.filter(b => {
+        // return b.fields.Tags.includes(tag.name)
+        // for each bookmark
+        // console.log('b.fields.Tags', b.fields.Tags)
+        // console.log('activeTags', context.activeTags)
+        return b.fields.Tags.some(tagInBookmarks => {
+          // for each tag in bookmark
+          // return tagInBookmarks === 'vue'
+          // console.log('tagInBookmarks', tagInBookmarks)
+          if (context.activeTags.length > 0 && context.currentTerm.length > 0) {
+            // there are active tags and an active search
+            return context.activeTags.find(activeTag => {
+              // for each activeTag
+              return activeTag.name === tagInBookmarks
+            }) && b.fields.Name.toLowerCase().includes(this.state.currentTerm.toLowerCase())
+          } else if (context.activeTags.length > 0 && context.currentTerm.length === 0) {
+            // there are active tags and no search term
             return context.activeTags.find(activeTag => {
               // for each activeTag
               return activeTag.name === tagInBookmarks
             })
-          })
+          } else if (context.activeTags.length === 0 && context.currentTerm.length > 0) {
+            // there are no active tags but a search term
+            return b.fields.Name.toLowerCase().includes(this.state.currentTerm.toLowerCase())
+          } else {
+            // there are no active tags or search terms
+            return true
+          }
         })
-      } else {
-        context.activeBookmarks = context.bookmarks
-      }
+      })
+      // }
     },
-    filterBookmarksByTerm (context, term) {
-      if (term.length > 0) {
-        context.searchedBookmarks = context.activeBookmarks.filter(t => {
-          return t.fields.Name.toLowerCase().includes(term.toLowerCase())
-        })
-      } else {
-        context.searchedBookmarks = []
+    setActiveTerm (context, { term, tag }) {
+      // console.log(context, term, tag)
+      if (term) {
+        // search incoming
+        if (term.length > 0) {
+          // if term is not empty set current term
+          this.state.currentTerm = term
+          // lets search
+          // context.commit('search')
+        } else {
+          // term is empty
+          this.state.currentTerm = ''
+        }
+        // if (this.state.activeTags.length > 0) {
+        //   // there are current active tags
+        //   console.log('search in active terms', this.state.activeTags)
+        // }
+        // console.log('search', term)
+      }
+      if (tag) {
+        // tagset incoming
+        console.log('tag', tag)
+        // context.commit('search')
+        // if (tag.active) {
+        //   // this is the incoming tag, so we don't expect it to be active yet
+        //   context.commit('search')
+        // } else {
+        //   // resetting, because no tags are active
+        //   // context.activeBookmarks = context.bookmarks
+        // }
+        // if (this.state.currentTerm.length > 0) {
+        //   console.log('tag with active search', tag)
+        // }
       }
     }
   },
@@ -116,11 +191,13 @@ export default new Vuex.Store({
       context.commit('getRecords')
     },
     tagSet (context, tag) {
+      // context.commit('filterBookmarks', { tag })
       context.commit('setActiveTag', tag)
-      context.commit('filterBookmarksByTags', tag)
+      context.commit('filter')
     },
     search (context, term) {
-      context.commit('filterBookmarksByTerm', term)
+      context.commit('setActiveTerm', { term })
+      context.commit('filter')
     }
   }
 })
