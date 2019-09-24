@@ -7,8 +7,9 @@
     <template v-if="bookmarks.length > 0">
       <div v-for="(bookmark, index) of bookmarks" :key="index">
         <template>
-          <h1>{{ bookmark.fields.Name }}</h1>
-          <a :href="bookmark.fields.Link">link</a>
+          <a :href="bookmark.fields.Link" target="_blank">
+            <h1>{{ bookmark.fields.Name }}</h1>
+          </a>
           <div> {{bookmark.fields.Star}} </div>
           <div> {{bookmark.fields.Tags}} </div>
         </template>
