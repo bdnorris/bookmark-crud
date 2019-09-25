@@ -1,5 +1,8 @@
 <template>
   <div class="tag-cloud">
+    <button type="button" @click="onlyFavorites">
+      Favorites
+    </button>
     <ul>
       <li :key="index" v-for="(tag, index) in tags">
         <button
@@ -34,6 +37,9 @@ export default {
         }
       })
       this.$store.dispatch('tagSet', tag)
+    },
+    onlyFavorites () {
+      this.$store.dispatch('onlyFavorites')
     }
   }
 }

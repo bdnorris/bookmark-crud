@@ -11,7 +11,8 @@ export default new Vuex.Store({
     bookmarks: [],
     activeBookmarks: [],
     searchedBookmarks: [],
-    currentTerm: ''
+    currentTerm: '',
+    onlyFavorites: false
   },
   mutations: {
     async getRecords () {
@@ -112,7 +113,6 @@ export default new Vuex.Store({
     //   }
     // },
     filter (context) {
-      // ! search is here, turn back on when ready
       // context.searchedBookmarks = context.activeBookmarks.filter(t => {
       //   return t.fields.Name.toLowerCase().includes(this.state.currentTerm.toLowerCase())
       // })
@@ -184,6 +184,13 @@ export default new Vuex.Store({
         //   console.log('tag with active search', tag)
         // }
       }
+    },
+    showOnlyFavorites (context) {
+      if (this.onlyFavorites) {
+        context.activeBookmarks = context.activeBookmarks.filter((b) => {
+          return b.fields.Star
+        })
+      }
     }
   },
   actions: {
@@ -198,6 +205,14 @@ export default new Vuex.Store({
     search (context, term) {
       context.commit('setActiveTerm', { term })
       context.commit('filter')
+    },
+    onlyFavorites (context) {
+      this.onlyFavorites = !this.onlyFavorites
+      if (this.onlyFavorites) {
+        context.commit('showOnlyFavorites')
+      } else {
+        context.commit('filter')
+      }
     }
   }
 })
