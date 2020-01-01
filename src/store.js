@@ -75,7 +75,7 @@ export default new Vuex.Store({
         context.tags.find(t => {
           return t.name === tag.name
         }).active = false
-        let pos = context.activeTags.indexOf(tag)
+        const pos = context.activeTags.indexOf(tag)
         context.activeTags.splice(pos, 1)
       }
       // console.log('bookmarks', this.bookmarks)
